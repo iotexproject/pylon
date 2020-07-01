@@ -6,14 +6,19 @@ import Layout from "antd/lib/layout";
 import gql from "graphql-tag";
 import { assetURL } from "onefx/lib/asset-url";
 import { styled } from "onefx/lib/styletron-react";
-import React, { PureComponent } from "react";
+import React, { PureComponent, useState } from "react";
 import { Query, QueryResult } from "react-apollo";
 import { t } from "onefx/lib/iso-i18n";
+import Button from "antd/lib/button";
+import sleepPromise from "sleep-promise";
+import { fromRau, toRau } from "iotex-antenna/lib/account/utils";
 import { colors } from "../common/styles/style-color";
 import { ContentPadding } from "../common/styles/style-padding";
 import { getAntenna } from "../common/antenna";
-import { Flex } from "../common/flex";
 import { CommonMargin } from "../common/common-margin";
+import { getContract } from "../../contract";
+import { IopayRequired } from "../common/iopay-required";
+import { Flex } from "../common/flex";
 
 const GET_HEALTH = gql`
   {
@@ -21,22 +26,63 @@ const GET_HEALTH = gql`
   }
 `;
 
-type State = {
-  address: string;
-};
+const CallContract = IopayRequired(function CallContract(): JSX.Element {
+  const [result, setResult] = useState("-");
+  const [balance, setBalance] = useState("-");
+  const [gamesPlayed, setGamesPlayed] = useState("-");
 
-export class Home extends PureComponent<unknown, State> {
-  componentDidMount(): void {
-    const acct = getAntenna().iotx.accounts.create(new Date().toString());
-    this.setState({
-      address: acct.address
+  const onClick = async (hand: number) => {
+    await getContract().methods.bet(hand, {
+      amount: toRau("1", "IOTX"),
+      account: getAntenna().iotx.accounts[0],
+      gasLimit: "300000",
+      gasPrice: "1000000000000"
     });
-  }
+    await sleepPromise(5000);
+    const r = await getContract().methods.lastResult({
+      account: getAntenna().iotx.accounts[0],
+      gasLimit: "300000",
+      gasPrice: "1000000000000"
+    });
 
-  state: State = {
-    address: ""
+    const b = await getContract().methods.balance({
+      account: getAntenna().iotx.accounts[0],
+      gasLimit: "300000",
+      gasPrice: "1000000000000"
+    });
+    const g = await getContract().methods.gamesPlayed({
+      account: getAntenna().iotx.accounts[0],
+      gasLimit: "300000",
+      gasPrice: "1000000000000"
+    });
+    setResult(r);
+    setBalance(fromRau(b, "Iotx"));
+    setGamesPlayed(g.toNumber());
   };
+  return (
+    <>
+      <Flex column={true}>
+        <div>Play rock paper scissors with a smart contract</div>
+        <div>Result: {result}</div>
+        <div>Balance: {balance}</div>
+        <div>Games Played: {gamesPlayed}</div>
+      </Flex>
 
+      <Flex column={true}>
+        Choose your hand...
+        <Flex>
+          <Button onClick={() => onClick(0)}>Rock</Button>
+          <CommonMargin />
+          <Button onClick={() => onClick(1)}>Paper</Button>
+          <CommonMargin />
+          <Button onClick={() => onClick(2)}>Scissors</Button>
+        </Flex>
+      </Flex>
+    </>
+  );
+});
+
+export class Home extends PureComponent {
   public render = (): JSX.Element => (
     <ContentPadding>
       <Layout>
@@ -89,17 +135,7 @@ export class Home extends PureComponent<unknown, State> {
 
           <CommonMargin />
 
-          <Row justify="center">
-            {!this.state.address && <LoadingOutlined />}
-            {this.state.address && (
-              <Flex column={true}>
-                <div>{t("home.account")}</div>
-                <div>
-                  <pre>{this.state.address}</pre>
-                </div>
-              </Flex>
-            )}
-          </Row>
+          <CallContract />
         </Layout.Content>
       </Layout>
     </ContentPadding>

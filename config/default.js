@@ -44,6 +44,9 @@ module.exports = {
     "connect-src": [
       "self",
       "https://www.google-analytics.com/",
+      "wss://local.iotex.io:64102/",
+      "https://api.testnet.iotex.one/",
+      "https://api.iotex.one/",
       ...(process.env.API_GATEWAY_URL ? [process.env.API_GATEWAY_URL] : [])
     ],
     "child-src": ["self"],

@@ -6,6 +6,7 @@ import isBrowser from "is-browser";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import JsonGlobal from "safe-json-globals/get";
+import { WsSignerPlugin } from "iotex-antenna/lib/plugin/ws";
 
 const state = isBrowser && JsonGlobal("state");
 const iotexCore = isBrowser && state.base.iotexCore;
@@ -15,6 +16,10 @@ export function getAntenna(): Antenna {
   if (injectedWindow.antenna) {
     return injectedWindow.antenna;
   }
-  injectedWindow.antenna = new Antenna(iotexCore);
+  let signer;
+  if (isBrowser) {
+    signer = new WsSignerPlugin();
+  }
+  injectedWindow.antenna = new Antenna(iotexCore, { signer });
   return injectedWindow.antenna;
 }
