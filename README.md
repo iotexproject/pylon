@@ -1,22 +1,23 @@
 # pylon
 
-[![CircleCI](https://circleci.com/gh/puncsky/pylon/tree/master.svg?style=svg)](https://circleci.com/gh/puncsky/pylon/tree/master)
+[![CircleCI](https://circleci.com/gh/iotexproject/pylon/tree/master.svg?style=svg)](https://circleci.com/gh/iotexproject/pylon/tree/master)
 
-- [Documentation](https://onefx.js.org/doc.html?utm_source=github-iotex-explorer)
-- [Contributing](https://onefx.js.org/contributing.html?utm_source=github-iotex-explorer)
+- [Documentation](https://docs.iotex.io/pylon/get-started.html?utm_source=github-pylon)
+- [Contributing](https://docs.iotex.io/pylon/code-review-checklist.html?utm_source=github-pylon)
 
 ## Getting Started
 
-OneFx is a full-stack framework for building web apps. Here are the features you'll find in Onefx.js:
+Pylon is a full-stack starter for building IoTeX Dapps. Here are the features you’ll find in Pylon:
 
-- server side rendering and universal rendering with react and redux
-- ES2017, JSX, TypeScript support out of the box
-- server-side development via Koa.js
+- Out-of-box integration with IoTeX antenna SDK and ioPay wallet
+- Server-side rendering and universal rendering with React and Redux
+- Apollo GraphQL (docs + playground), ES2017, TypeScript, TSX support out of the box
+- Server-side development via Koa.js
 
 ### Create a project
 
 ```bash
-git clone git@github.com:puncsky/pylon.git my-awesome-project
+git clone git@github.com:iotexproject/pylon.git my-awesome-project
 ```
 
 ### Run your project
