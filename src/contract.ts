@@ -261,7 +261,7 @@ const ABI = [
   }
 ];
 
-export function getContract() {
+export function getContract(): Contract {
   return new Contract(ABI, CONTRACT_ADDRESS, {
     provider: getAntenna().iotx,
     signer: getAntenna().iotx.signer
