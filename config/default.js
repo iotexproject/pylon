@@ -1,6 +1,14 @@
 const { config } = require("dotenv");
 config();
 
+let iotexCore = process.env.IOTEX_CORE;
+if (!iotexCore) {
+  console.warn(
+    "cannot find IOTEX_CORE environment variable and fallback to https://api.iotex.one"
+  );
+  iotexCore = "https://api.iotex.one";
+}
+
 module.exports = {
   project: "pylon",
   server: {
@@ -56,5 +64,5 @@ module.exports = {
     "object-src": ["self"],
     "script-src": ["self", "unsafe-eval", "https://www.google-analytics.com/"]
   },
-  iotexCore: process.env.IOTEX_CORE
+  iotexCore
 };
