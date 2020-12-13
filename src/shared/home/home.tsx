@@ -57,7 +57,7 @@ const CallContract = IopayRequired(function CallContract(): JSX.Element {
     });
     setResult(r);
     setBalance(fromRau(b, "Iotx"));
-    setGamesPlayed(g.toNumber());
+    setGamesPlayed(g);
   };
   return (
     <>
