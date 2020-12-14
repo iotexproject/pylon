@@ -18,7 +18,7 @@ export function getAntenna(): Antenna {
   }
   let signer;
   if (isBrowser) {
-    signer = new WsSignerPlugin();
+    signer = window.antennaSigner || new WsSignerPlugin(); // antennaSigner can injected by Browser Extension
   }
   injectedWindow.antenna = new Antenna(iotexCore, { signer });
   return injectedWindow.antenna;
